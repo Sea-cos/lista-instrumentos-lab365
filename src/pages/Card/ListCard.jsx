@@ -1,32 +1,11 @@
-import { useEffect, useState } from "react";
 import "./ListCard.css";
+import { useGetInstruments } from "../../hooks/useGetInstruments";
 
 export function Cards() {
-const [instrumentos, setInstrumentos] = useState([]);
-  const [loading, setLoading] = useState(true);
-  const [erro, setErro] = useState(null);
-
-  useEffect(() => {
-    async function fetchInstrumentos() {
-      try {
-        const resposta = await fetch("http://localhost:3000/equipamentos");
-        if (!resposta.ok) {
-          throw new Error("Erro ao buscar instrumentos");
-        }
-        const dados = await resposta.json();
-        setInstrumentos(dados);
-      } catch (err) {
-        setErro(err.message);
-      } finally {
-        setLoading(false);
-      }
-    }
-
-    fetchInstrumentos();
-  }, []);
+    const {data: instrumentos, loading, error}= useGetInstruments();
 
   if (loading) return <p>Carregando instrumentos...</p>;
-  if (erro) return <p>Erro: {erro}</p>;
+  if (error) return <p>Erro: {error}</p>;
 
   return (
  <div className="container-cards">
